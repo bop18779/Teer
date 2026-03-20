@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teer Live Results | Full Portal & Sharing</title>
+    <style>
+        :root { --primary: #1b4332; --secondary: #d4af37; --accent: #e63946; --whatsapp: #25D366; --dark: #081c15; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: #f0f2f5; color: #333; }
+        
+        header { background: var(--primary); color: var(--secondary); text-align: center; padding: 25px; border-bottom: 5px solid var(--secondary); position: relative; }
+        .live-tag { background: var(--accent); color: white; padding: 3px 10px; border-radius: 4px; font-size: 0.7rem; position: absolute; top: 15px; right: 15px; animation: pulse 2s infinite; font-weight: bold; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        .container { max-width: 900px; margin: auto; padding: 15px; }
+        .sync-status { text-align: center; font-size: 0.8rem; color: #666; margin-bottom: 15px; font-style: italic; }
+
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        
+        .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 5px solid var(--primary); display: flex; flex-direction: column; }
+        .card h2 { margin: 0 0 10px 0; color: var(--primary); font-size: 1.3rem; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        .date-text { font-size: 0.85rem; color: #888; font-weight: normal; }
+
+        .num-display { display: flex; justify-content: space-around; background: #fffcf0; padding: 15px; border-radius: 10px; margin-top: 10px; border: 1px solid #f0e6c1; }
+        .slot { text-align: center; }
+        .label { font-size: 0.7rem; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; display: block; }
+        .val { font-size: 2.2rem; font-weight: 900; color: var(--accent); }
+
+        /* WhatsApp Button */
+        .share-btn { background: var(--whatsapp); color: white; border: none; padding: 10px; border-radius: 6px; margin-top: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; gap: 8px; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .share-btn:hover { background: #128c7e; transform: scale(1.02); }
+
+        .common-section { margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        th { background: var(--primary); color: var(--secondary); padding: 12px; font-size: 0.9rem; }
+        td { border: 1px solid #eee; padding: 15px; text-align: center; font-weight: bold; font-size: 1.2rem; }
+
+        .strategy { background: var(--dark); color: #eee; padding: 25px; border-radius: 12px; margin-top: 30px; }
+        .dream-list { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; height: 120px; overflow-y: auto; font-size: 0.9rem; border: 1px solid #333; line-height: 1.8; }
+
+        footer { text-align: center; padding: 40px; color: #888; font-size: 0.8rem; }
+        
+        @media (max-width: 600px) { .results-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="live-tag">LIVE UPDATES</div>
+    <h1>Teer Results Portal</h1>
+    <div id="clock" style="color: white; font-size: 0.9rem; margin-top: 5px;">Loading time...</div>
+</header>
+
+<div class="container">
+    <div class="sync-status" id="sync-info">Connecting to database...</div>
+
+    <div class="results-grid">
+        <div class="card" id="card-shillong">
+            <h2>Shillong Teer <span class="date-text" id="date-shillong">--</span></h2>
+            <div class="num-display">
+                <div class="slot"><span class="label">F/R</span><span class="val" id="shillong-fr">--</span></div>
+                <div class="slot"><span class="label">S/R</span><span class="val" id="shillong-sr">--</span></div>
+            </div>
+            <button class="share-btn" onclick="shareToWhatsapp('Shillong Teer', 'shillong')">Share on WhatsApp</button>
+        </div>
+
+        <div class="card" id="card-khanapara">
+            <h2>Khanapara <span class="date-text" id="date-khanapara">--</span></h2>
+            <div class="num-display">
+                <div class="slot"><span class="label">F/R</span><span class="val" id="khanapara-fr">--</span></div>
+                <div class="slot"><span class="label">S/R</span><span class="val" id="khanapara-sr">--</span></div>
+            </div>
+            <button class="share-btn" onclick="shareToWhatsapp('Khanapara Teer', 'khanapara')">Share on WhatsApp</button>
+        </div>
+
+        <div class="card" id="card-juwai">
+            <h2>Juwai Teer <span class="date-text" id="date-juwai">--</span></h2>
+            <div class="num-display">
+                <div class="slot"><span class="label">F/R</span><span class="val" id="juwai-fr">--</span></div>
+                <div class="slot"><span class="label">S/R</span><span class="val" id="juwai-sr">--</span></div>
+            </div>
+            <button class="share-btn" onclick="shareToWhatsapp('Juwai Teer', 'juwai')">Share on WhatsApp</button>
+        </div>
+
+        <div class="card" id="card-shillongmorning">
+            <h2>Shillong Morning <span class="date-text" id="date-shillongmorning">--</span></h2>
+            <div class="num-display">
+                <div class="slot"><span class="label">F/R</span><span class="val" id="shillongmorning-fr">--</span></div>
+                <div class="slot"><span class="label">S/R</span><span class="val" id="shillongmorning-sr">--</span></div>
+            </div>
+            <button class="share-btn" onclick="shareToWhatsapp('Shillong Morning', 'shillongmorning')">Share on WhatsApp</button>
+        </div>
+
+        <div class="card" id="card-shillongnight">
+            <h2>Shillong Night <span class="date-text" id="date-shillongnight">--</span></h2>
+            <div class="num-display">
+                <div class="slot"><span class="label">F/R</span><span class="val" id="shillongnight-fr">--</span></div>
+                <div class="slot"><span class="label">S/R</span><span class="val" id="shillongnight-sr">--</span></div>
+            </div>
+            <button class="share-btn" onclick="shareToWhatsapp('Shillong Night', 'shillongnight')">Share on WhatsApp</button>
+        </div>
+    </div>
+
+    <div class="common-section">
+        <div class="card">
+            <h2>Daily Common Numbers</h2>
+            <table>
+                <tr><th>Target</th><th>House</th><th>Ending</th></tr>
+                <tr><td>Direct Hit</td><td id="house-auto">--</td><td id="ending-auto">--</td></tr>
+                <tr><td>Common</td><td colspan="2" id="common-auto">--</td></tr>
+            </table>
+            <button class="share-btn" style="background: var(--primary);" onclick="shareCommon()">Share Common Numbers</button>
+        </div>
+    </div>
+
+    <div class="strategy">
+        <h3>Dream Formula (Full Chart)</h3>
+        <div class="dream-list">
+            Accident: 88 | Bird: 11 | Cat: 05 | Dead Body: 99 | Elephant: 55 | Fish: 03 | Fire: 40 | Ghost: 33 | Snake: 09 | Water: 07 | Wedding: 16
+        </div>
+    </div>
+</div>
+
+<footer>
+    &copy; 2026 Official Teer Portal | Designed for Instant Updates
+</footer>
+
+<script>
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRLLvCJ4TLTpehy8OBR3c39k7EvWaTi2iDq8VEJ0QosB8ubbFbdE7tbiYXcgXRDkPGJH7HOmzM__peL/pub?gid=0&single=true&output=csv';
+
+    // 1. LIVE CLOCK
+    setInterval(() => {
+        document.getElementById('clock').innerText = "Local Time: " + new Date().toLocaleTimeString();
+    }, 1000);
+
+    // 2. DATA SYNC
+    async function syncData() {
+        const info = document.getElementById('sync-info');
+        try {
+            const response = await fetch(SHEET_URL);
+            const csv = await response.text();
+            const lines = csv.split('\n').filter(l => l.trim() !== "");
+            const latest = {};
+
+            for(let i = 1; i < lines.length; i++) {
+                const [game, date, fr, sr] = lines[i].split(',');
+                if(!game) continue;
+                const key = game.trim().toLowerCase().replace(/\s/g, '');
+                latest[key] = { date, fr, sr };
+            }
+
+            Object.keys(latest).forEach(key => {
+                if(document.getElementById(key + '-fr')) {
+                    document.getElementById(key + '-fr').innerText = latest[key].fr || '--';
+                    document.getElementById(key + '-sr').innerText = latest[key].sr || '--';
+                    document.getElementById('date-' + key).innerText = latest[key].date || '--';
+                }
+            });
+            info.innerText = "Last Updated: " + new Date().toLocaleTimeString();
+        } catch (e) {
+            info.innerText = "Syncing...";
+        }
+    }
+
+    // 3. WHATSAPP SHARING LOGIC
+    function shareToWhatsapp(gameName, id) {
+        const fr = document.getElementById(id + '-fr').innerText;
+        const sr = document.getElementById(id + '-sr').innerText;
+        const date = document.getElementById('date-' + id).innerText;
+        
+        const message = `*${gameName} Result*\nDate: ${date}\n------------------\nF/R: *${fr}*\nS/R: *${sr}*\n------------------\nCheck live results here: ${window.location.href}`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+    }
+
+    function shareCommon() {
+        const h = document.getElementById('house-auto').innerText;
+        const e = document.getElementById('ending-auto').innerText;
+        const c = document.getElementById('common-auto').innerText;
+        
+        const message = `*Today's Common Numbers*\nHouse: ${h}\nEnding: ${e}\nCommon: ${c}\n------------------\nGood Luck!`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+    }
+
+    function setDailyCommon() {
+        const d = new Date().getDate();
+        document.getElementById('house-auto').innerText = `${d%10}, ${(d+5)%10}`;
+        document.getElementById('ending-auto').innerText = `${(d+2)%10}, ${(d+7)%10}`;
+        document.getElementById('common-auto').innerText = `${d+12}, ${d+22}, ${d+8}`;
+    }
+
+    syncData();
+    setDailyCommon();
+    setInterval(syncData, 120000);
+</script>
+
+</body>
+</html>
